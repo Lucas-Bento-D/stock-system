@@ -1,8 +1,8 @@
 package com.marley_store.stock_system.controller;
 
-import com.marley_store.stock_system.model.StatusUser;
-import com.marley_store.stock_system.model.User;
-import com.marley_store.stock_system.service.UserService;
+import com.marley_store.stock_system.model.user.StatusUser;
+import com.marley_store.stock_system.model.user.User;
+import com.marley_store.stock_system.service.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 

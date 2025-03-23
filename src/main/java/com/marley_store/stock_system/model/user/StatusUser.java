@@ -1,4 +1,4 @@
-package com.marley_store.stock_system.model;
+package com.marley_store.stock_system.model.user;
 
 import lombok.Getter;
 import lombok.Setter;

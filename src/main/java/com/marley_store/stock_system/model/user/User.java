@@ -1,12 +1,9 @@
-package com.marley_store.stock_system.model;
+package com.marley_store.stock_system.model.user;
 
+import com.marley_store.stock_system.model.role.Role;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-
-import lombok.Getter;
-import lombok.Setter;
-import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
@@ -23,10 +20,17 @@ public class User {
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
     private String name;
+
+    @Column(unique = true)
     private String email;
     private String cnpj;
     private String password;
-    private List<String> roles;
+
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
+    @JoinTable(name = "user_roles",
+                joinColumns = @JoinColumn(name = "user_id"),
+                inverseJoinColumns = @JoinColumn(name = "role_id"))
+    private List<Role> roles;
 
     public User(){}
 
@@ -81,11 +85,11 @@ public class User {
         this.password = password;
     }
 
-    public List<String> getRoles() {
+    public List<Role> getRoles() {
         return roles;
     }
 
-    public void setRoles(List<String> roles) {
-        this.roles = roles;
+    public void setRoles(List<Role> role) {
+        this.roles = role;
     }
 }

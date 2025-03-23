@@ -1,6 +1,5 @@
 package com.marley_store.stock_system.controller;
 
-import com.marley_store.stock_system.model.User;
 import com.marley_store.stock_system.service.HelloWorldService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
