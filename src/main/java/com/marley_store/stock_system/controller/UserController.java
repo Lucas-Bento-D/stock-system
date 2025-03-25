@@ -1,9 +1,11 @@
 package com.marley_store.stock_system.controller;
 
-import com.marley_store.stock_system.model.user.StatusUser;
-import com.marley_store.stock_system.model.user.User;
+import com.marley_store.stock_system.model.user.*;
 import com.marley_store.stock_system.service.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -24,13 +26,27 @@ public class UserController {
         return userService.getAllUsers();
     }
 
-    @PostMapping("/create-user")
-    public StatusUser createUser(@RequestBody User user){
-        return userService.createUser(user);
-    }
-
     @DeleteMapping("/delete-user")
     public StatusUser deleteUser(@RequestBody User user){
         return userService.deleteUser(user);
+    }
+
+
+    @PostMapping("/create-user")
+    public ResponseEntity<Void> createUser(@RequestBody CreateUserDTO createUserDTO){
+        System.out.println("vem aqui");
+        userService.createUser(createUserDTO);
+        return new ResponseEntity<>(HttpStatus.CREATED);
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<RecoveryJwtTokenDto> authenticateUser(@RequestBody LoginUserDto loginUserDto){
+        RecoveryJwtTokenDto token = userService.authenticateUser(loginUserDto);
+        return new ResponseEntity<>(token, HttpStatus.OK);
+    }
+
+    @GetMapping("/test")
+    public ResponseEntity<String> getAuthenticationTest() {
+        return new ResponseEntity<>("Autenticado com sucesso", HttpStatus.OK);
     }
 }

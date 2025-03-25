@@ -3,7 +3,9 @@ package com.marley_store.stock_system.model.user;
 import com.marley_store.stock_system.model.role.Role;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.ToString;
 
 import java.util.List;
 
@@ -12,6 +14,7 @@ import java.util.List;
  * Getter e Setter são decorators que ja trazem automaticamente os getters e setters das propriedades
  */
 @Data
+@Builder
 @Entity
 @AllArgsConstructor
 @Table(name = "users")
@@ -30,6 +33,7 @@ public class User {
     @JoinTable(name = "user_roles",
                 joinColumns = @JoinColumn(name = "user_id"),
                 inverseJoinColumns = @JoinColumn(name = "role_id"))
+    @ToString.Exclude
     private List<Role> roles;
 
     public User(){}
