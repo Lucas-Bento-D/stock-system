@@ -15,6 +15,10 @@ public class UserDetailsImpl implements UserDetails {
     private User user;
 
     public UserDetailsImpl(User user) {
+        if (user == null) {
+            throw new IllegalArgumentException("O usuário não pode ser nulo");
+        }
+        this.user = user;
     }
 
     @Override
@@ -32,7 +36,7 @@ public class UserDetailsImpl implements UserDetails {
 
     @Override
     public String getUsername() {
-        return user.getName();
+        return user.getEmail();
     }
 
     @Override

@@ -1,6 +1,7 @@
 package com.marley_store.stock_system.config.security;
 
 import com.marley_store.stock_system.config.userAuthenticationFilter.UserAuthenticationFilter;
+import com.marley_store.stock_system.service.user.userDetailsServiceImpl.UserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -23,6 +24,9 @@ public class SecurityConfiguration {
     @Autowired
     private UserAuthenticationFilter userAuthenticationFilter;
 
+    @Autowired
+    private UserDetailsServiceImpl userDetailsService;
+
 
     public static final String[] ENDPOINTS_WITH_AUTHENTICATION_NOT_REQUIRED = {
             "/v1/user/login",
@@ -31,7 +35,7 @@ public class SecurityConfiguration {
 
     // Endpoints que requerem autenticação para serem acessados
     public static final String [] ENDPOINTS_WITH_AUTHENTICATION_REQUIRED = {
-            "/v1/users/test"
+            "/v1/user/test"
     };
 
     // Endpoints que só podem ser acessador por usuários com permissão de cliente
@@ -48,6 +52,7 @@ public class SecurityConfiguration {
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity, UserAuthenticationFilter userAuthenticationFilter) throws Exception{
         httpSecurity
                 .csrf(csrf -> csrf.disable()) // Alternativa moderna para disable()
+                .userDetailsService(userDetailsService)
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )

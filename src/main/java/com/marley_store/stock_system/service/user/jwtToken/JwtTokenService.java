@@ -15,15 +15,15 @@ import java.time.ZonedDateTime;
 public class JwtTokenService {
     private static final String SECRET_KEY = "4Z^XrroxR@dWxqf$mTTKwW$!@#qGr4P";
     private static final String ISSUER = "pizzurg-api";
-    private final Algorithm algorithm = Algorithm.HMAC256(SECRET_KEY);
 
     public String generateToken(UserDetailsImpl userDetails){
+        Algorithm algorithm = Algorithm.HMAC256(SECRET_KEY);
         try{
             return JWT.create()
                     .withIssuer(ISSUER)
                     .withIssuedAt(creationDate())
                     .withExpiresAt(expirationDate())
-                    .withSubject(userDetails.getUsername())
+                    .withSubject(userDetails.getUser().getEmail())
                     .sign(algorithm);
         }catch (JWTCreationException exception){
             throw new JWTCreationException("Erro ao gerar token.", exception);
@@ -31,6 +31,7 @@ public class JwtTokenService {
     }
 
     public String getSubjectFromToken(String token){
+        Algorithm algorithm = Algorithm.HMAC256(SECRET_KEY);
         try{
             return JWT.require(algorithm)
                     .withIssuer(ISSUER)
@@ -43,10 +44,10 @@ public class JwtTokenService {
     }
 
     private Instant creationDate() {
-        return ZonedDateTime.now(ZoneId.of("America/Brasilia")).toInstant();
+        return ZonedDateTime.now(ZoneId.of("America/Recife")).toInstant();
     }
 
     private Instant expirationDate() {
-        return ZonedDateTime.now(ZoneId.of("America/Brasilia")).plusHours(4).toInstant();
+        return ZonedDateTime.now(ZoneId.of("America/Recife")).plusHours(4).toInstant();
     }
 }
