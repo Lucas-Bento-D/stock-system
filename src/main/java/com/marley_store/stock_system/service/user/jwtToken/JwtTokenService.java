@@ -34,10 +34,10 @@ public class JwtTokenService {
         Algorithm algorithm = Algorithm.HMAC256(SECRET_KEY);
         try{
             return JWT.require(algorithm)
-                    .withIssuer(ISSUER)
+                    .withIssuer(ISSUER) // emissor do token como parametro
                     .build()
-                    .verify(token)
-                    .getSubject();
+                    .verify(token) // verifica validade do token
+                    .getSubject(); // pega o nome do usuario do token(nesse caso o email)
         }catch (JWTVerificationException exception){
             throw new JWTVerificationException("Token invalido ou expirado");
         }

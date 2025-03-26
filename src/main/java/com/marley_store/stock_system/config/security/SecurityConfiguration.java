@@ -48,11 +48,12 @@ public class SecurityConfiguration {
 
     };
 
+    // retorna a configuração principal de segurança do Spring Security para a aplicação. Ele define a política de autorização para os endpoints da API REST.
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity, UserAuthenticationFilter userAuthenticationFilter) throws Exception{
         httpSecurity
                 .csrf(csrf -> csrf.disable()) // Alternativa moderna para disable()
-                .userDetailsService(userDetailsService)
+                .userDetailsService(userDetailsService) // força o uso da classe UserDetailsService, chamando agora o metodo loadUserByUsername
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
@@ -68,11 +69,13 @@ public class SecurityConfiguration {
         return httpSecurity.build();
     }
 
+    //retorna AuthenticationManager que é responsavel para fazer a autenticação do usuario
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
         return authenticationConfiguration.getAuthenticationManager();
     }
 
+    // retorna um PasswordEncoder que é usado para codificar a senha dos usuarios( estamos usando o Bcrypt, mas poderiamos usar outros meios)
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();

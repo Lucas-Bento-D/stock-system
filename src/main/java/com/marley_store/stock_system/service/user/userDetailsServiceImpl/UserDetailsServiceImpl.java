@@ -18,6 +18,13 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         this.userRepository = userRepository;
     }
 
+    /**
+     * O metodo loadUserByUserName é um metodo que carrega informações do usuario a partir de um email.
+     * Basicamente ele vai fazer um findo no email, construir um UserDetailsImpl e retornar.
+     * @param email
+     * @return
+     * @throws UsernameNotFoundException
+     */
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         User user = userRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("usuario nao encontrado"));
