@@ -1,4 +1,4 @@
-package com.marley_store.stock_system.service.user.jwtToken;
+package com.marley_store.stock_system.service.jwtToken;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;

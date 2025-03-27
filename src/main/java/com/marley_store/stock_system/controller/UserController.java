@@ -1,10 +1,12 @@
 package com.marley_store.stock_system.controller;
 
+import com.marley_store.stock_system.dto.user.CreateUserDTO;
+import com.marley_store.stock_system.dto.user.LoginUserDTO;
+import com.marley_store.stock_system.dto.jwtToken.RecoveryJwtTokenDTO;
 import com.marley_store.stock_system.model.user.*;
 import com.marley_store.stock_system.service.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -40,8 +42,8 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<RecoveryJwtTokenDto> authenticateUser(@RequestBody LoginUserDto loginUserDto){
-        RecoveryJwtTokenDto token = userService.authenticateUser(loginUserDto);
+    public ResponseEntity<RecoveryJwtTokenDTO> authenticateUser(@RequestBody LoginUserDTO loginUserDto){
+        RecoveryJwtTokenDTO token = userService.authenticateUser(loginUserDto);
         return new ResponseEntity<>(token, HttpStatus.OK);
     }
 

@@ -1,13 +1,15 @@
 package com.marley_store.stock_system.service.user;
 
 import com.marley_store.stock_system.config.security.SecurityConfiguration;
+import com.marley_store.stock_system.dto.user.CreateUserDTO;
+import com.marley_store.stock_system.dto.user.LoginUserDTO;
+import com.marley_store.stock_system.dto.jwtToken.RecoveryJwtTokenDTO;
 import com.marley_store.stock_system.model.role.Role;
 import com.marley_store.stock_system.model.user.*;
 import com.marley_store.stock_system.model.user.userDetailsImpl.UserDetailsImpl;
 import com.marley_store.stock_system.repository.UserRepository;
-import com.marley_store.stock_system.service.user.jwtToken.JwtTokenService;
+import com.marley_store.stock_system.service.jwtToken.JwtTokenService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.security.SecurityProperties;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -15,8 +17,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 public class UserService {
@@ -70,7 +70,7 @@ public class UserService {
         return new StatusUser(204, "User Deleted");
     }
 
-    public RecoveryJwtTokenDto authenticateUser(LoginUserDto loginUserDto){
+    public RecoveryJwtTokenDTO authenticateUser(LoginUserDTO loginUserDto){
         System.out.println("Chamando authenticateUser com: " + loginUserDto.email());
         UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(loginUserDto.email(), loginUserDto.password());
         System.out.println(usernamePasswordAuthenticationToken);
@@ -80,7 +80,7 @@ public class UserService {
 
         Authentication authentication = authenticationManager.authenticate(usernamePasswordAuthenticationToken);
         UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
-        return new RecoveryJwtTokenDto(jwtTokenService.generateToken(userDetails));
+        return new RecoveryJwtTokenDTO(jwtTokenService.generateToken(userDetails));
     }
 
 
