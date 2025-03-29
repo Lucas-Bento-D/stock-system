@@ -1,10 +1,16 @@
 package com.marley_store.stock_system.service.user;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.marley_store.stock_system.config.security.SecurityConfiguration;
 import com.marley_store.stock_system.dto.user.CreateUserDTO;
 import com.marley_store.stock_system.dto.user.LoginUserDTO;
 import com.marley_store.stock_system.dto.jwtToken.RecoveryJwtTokenDTO;
 import com.marley_store.stock_system.model.role.Role;
+import com.marley_store.stock_system.model.role.RoleName;
 import com.marley_store.stock_system.model.user.*;
 import com.marley_store.stock_system.model.user.userDetailsImpl.UserDetailsImpl;
 import com.marley_store.stock_system.repository.UserRepository;
@@ -16,7 +22,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import java.util.*;
 
 @Service
 public class UserService {
@@ -83,5 +89,39 @@ public class UserService {
         return new RecoveryJwtTokenDTO(jwtTokenService.generateToken(userDetails));
     }
 
+    public void updateUser(CreateUserDTO createUserDTO) throws JsonProcessingException {
+        User user = userRepository.findByEmail(createUserDTO.email()).orElseThrow(() -> new RuntimeException("Usuario n'ao encontrado"));
+        ObjectMapper objectMapper = new ObjectMapper()
+                .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+        ObjectNode userObject = objectMapper.valueToTree(user);
+        ObjectNode createUserDTOObject = objectMapper.valueToTree(createUserDTO);
+
+//        ObjectNode objectMeged = objectMapper.createObjectNode();
+//        objectMeged.setAll((ObjectNode) createUserDTOObject);
+//        objectMeged.setAll((ObjectNode) userObject);
+
+        createUserDTOObject.fields().forEachRemaining( entry -> {
+            if (
+                    !entry.getValue().isNull() &&
+                    (userObject.get(entry.getKey()) != entry.getValue() && !Objects.equals(entry.getKey(), "email"))
+            ){
+                System.out.println(entry.getKey() + " " + entry.getValue());
+                userObject.set(entry.getKey(), entry.getValue());
+            }
+        });
+
+//        CreateUserDTO newUser = objectMapper.treeToValue(userObject, CreateUserDTO.class);
+        List<Role> roles = List.of(Role.builder().name(RoleName.valueOf(userObject.get("roles").asText())).build());
+        User updatedUser = User.builder()
+                        .id(userObject.get("id").longValue())
+                        .name(userObject.get("name").asText())
+                        .password(userObject.get("password").asText())
+                        .email(userObject.get("email").asText())
+                        .cnpj(userObject.get("cnpj").asText())
+                        .roles(roles).build();
+        System.out.println(updatedUser.toString());
+//        userRepository.save(updatedUser);
+
+    }
 
 }

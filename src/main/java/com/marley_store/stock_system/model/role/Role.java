@@ -17,10 +17,7 @@ public class Role {
     private Long id;
 
     @Enumerated(EnumType.STRING)
-    @Column(unique = true, nullable = false)
+    @Column(nullable = false)
     private RoleName name;
 
-    public RoleName getName() {
-        return name;
-    }
 }

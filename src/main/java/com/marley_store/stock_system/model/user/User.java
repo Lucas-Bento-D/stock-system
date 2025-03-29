@@ -29,6 +29,7 @@ public class User {
     private String cnpj;
     private String password;
 
+
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
     @JoinTable(name = "user_roles",
                 joinColumns = @JoinColumn(name = "user_id"),
@@ -47,6 +48,19 @@ public class User {
         this.password = user.password;
         if( user.name != null ) this.name = user.name;
         if( user.cnpj != null ) this.cnpj = user.cnpj;
+    }
+
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", email='" + email + '\'' +
+                ", cnpj='" + cnpj + '\'' +
+                ", password='" + password + '\'' +
+                ", roles=" + roles +
+                '}';
     }
 
     public Long getId() {

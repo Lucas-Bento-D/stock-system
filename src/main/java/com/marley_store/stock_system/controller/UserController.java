@@ -1,5 +1,6 @@
 package com.marley_store.stock_system.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.marley_store.stock_system.dto.user.CreateUserDTO;
 import com.marley_store.stock_system.dto.user.LoginUserDTO;
 import com.marley_store.stock_system.dto.jwtToken.RecoveryJwtTokenDTO;
@@ -28,15 +29,14 @@ public class UserController {
         return userService.getAllUsers();
     }
 
-    @DeleteMapping("/delete-user")
+    @DeleteMapping("/delete")
     public StatusUser deleteUser(@RequestBody User user){
         return userService.deleteUser(user);
     }
 
 
-    @PostMapping("/create-user")
+    @PostMapping("/create")
     public ResponseEntity<Void> createUser(@RequestBody CreateUserDTO createUserDTO){
-        System.out.println("vem aqui");
         userService.createUser(createUserDTO);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
@@ -45,6 +45,13 @@ public class UserController {
     public ResponseEntity<RecoveryJwtTokenDTO> authenticateUser(@RequestBody LoginUserDTO loginUserDto){
         RecoveryJwtTokenDTO token = userService.authenticateUser(loginUserDto);
         return new ResponseEntity<>(token, HttpStatus.OK);
+    }
+
+    @PatchMapping("/update-user")
+    public ResponseEntity<String> updateUser(@RequestBody  CreateUserDTO createUserDTO) throws JsonProcessingException {
+        System.out.println("vem aqui");
+        userService.updateUser(createUserDTO);
+        return new ResponseEntity<>("Usuario atualizado com sucesso!", HttpStatus.OK);
     }
 
     @GetMapping("/test")
