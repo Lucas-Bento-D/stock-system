@@ -30,6 +30,7 @@ public class UserDetailsImpl implements UserDetails {
          novo SimpleGrantedAuthority, que é uma implementação simples de
          GrantedAuthority
         */
+
         return user.getRoles()
                 .stream()
                 .map(role -> new SimpleGrantedAuthority(role.getName().name()))

@@ -1,6 +1,7 @@
 package com.marley_store.stock_system.service.user;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -23,6 +24,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class UserService {
@@ -111,16 +113,27 @@ public class UserService {
         });
 
 //        CreateUserDTO newUser = objectMapper.treeToValue(userObject, CreateUserDTO.class);
-        List<Role> roles = List.of(Role.builder().name(RoleName.valueOf(userObject.get("roles").asText())).build());
+//        System.out.println(userObject);
+//        System.out.println(userObject.get("roles"));
+
+//        ObjectNode roles = objectMapper.valueToTree(userObject.get("roles"));
+
+        System.out.println(userObject.get("roles"));
+
+        List<Role> roles = objectMapper.convertValue(userObject.get("roles"), new TypeReference<List<Role>>(){});
         User updatedUser = User.builder()
                         .id(userObject.get("id").longValue())
                         .name(userObject.get("name").asText())
                         .password(userObject.get("password").asText())
                         .email(userObject.get("email").asText())
                         .cnpj(userObject.get("cnpj").asText())
-                        .roles(roles).build();
-        System.out.println(updatedUser.toString());
-//        userRepository.save(updatedUser);
+                        .roles(roles)
+                        .build();
+//        System.out.println(user.getRoles().stream().map(
+//                role -> role.getName().name()).collect(Collectors.toList())
+//        );
+//        System.out.println(updatedUser.getRoles().stream().map(role -> role.getName().name()).collect(Collectors.toList())  );
+        userRepository.save(updatedUser);
 
     }
 
