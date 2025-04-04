@@ -48,6 +48,22 @@ public class UserAuthenticationFilter extends OncePerRequestFilter {
         filterChain.doFilter(request, response);
     }
 
+    public Boolean verifyEmailToken(HttpServletRequest request, String email){
+        if(checkIfEndpointIsNotPublic(request)){
+            String token = recoveryToken(request);
+            if (token != null){
+                String subject = jwtTokenService.getSubjectFromToken(token);
+                User user = userRepository.findByEmail(subject).get();
+
+                if(user.getEmail() == email) return true;
+                return false;
+            }else {
+                throw new RuntimeException("Token ausente");
+            }
+        }
+        return false;
+    }
+
     // Recupera o token do cabeçalho Authorization da requisição
     private String recoveryToken(HttpServletRequest request) {
         String authorizationHeader = request.getHeader("Authorization");
