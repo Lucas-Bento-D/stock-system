@@ -6,6 +6,7 @@ import com.marley_store.stock_system.dto.user.LoginUserDTO;
 import com.marley_store.stock_system.dto.jwtToken.RecoveryJwtTokenDTO;
 import com.marley_store.stock_system.model.user.*;
 import com.marley_store.stock_system.service.user.UserService;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -48,9 +49,8 @@ public class UserController {
     }
 
     @PatchMapping("/update-user")
-    public ResponseEntity<String> updateUser(@RequestBody  CreateUserDTO createUserDTO) throws JsonProcessingException {
-        System.out.println("vem aqui");
-        userService.updateUser(createUserDTO);
+    public ResponseEntity<String> updateUser(@RequestBody  CreateUserDTO createUserDTO, HttpServletRequest request) throws JsonProcessingException {
+        userService.updateUser(createUserDTO, request);
         return new ResponseEntity<>("Usuario atualizado com sucesso!", HttpStatus.OK);
     }
 

@@ -7,6 +7,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.marley_store.stock_system.config.security.SecurityConfiguration;
+import com.marley_store.stock_system.config.userAuthenticationFilter.UserAuthenticationFilter;
 import com.marley_store.stock_system.dto.user.CreateUserDTO;
 import com.marley_store.stock_system.dto.user.LoginUserDTO;
 import com.marley_store.stock_system.dto.jwtToken.RecoveryJwtTokenDTO;
@@ -16,6 +17,7 @@ import com.marley_store.stock_system.model.user.*;
 import com.marley_store.stock_system.model.user.userDetailsImpl.UserDetailsImpl;
 import com.marley_store.stock_system.repository.UserRepository;
 import com.marley_store.stock_system.service.jwtToken.JwtTokenService;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -46,6 +48,9 @@ public class UserService {
 
     @Autowired
     private SecurityConfiguration securityConfiguration;
+
+    @Autowired
+    private UserAuthenticationFilter userAuthenticationFilter;
 
 
     public List<User> findByName(String name){
@@ -91,16 +96,17 @@ public class UserService {
         return new RecoveryJwtTokenDTO(jwtTokenService.generateToken(userDetails));
     }
 
-    public void updateUser(CreateUserDTO createUserDTO) throws JsonProcessingException {
+    public void updateUser(CreateUserDTO createUserDTO, HttpServletRequest request) throws JsonProcessingException {
+
+        Boolean isSameUser = userAuthenticationFilter.verifyEmailToken(request, createUserDTO.email());
+
+        if(!isSameUser) throw new RuntimeException("Email não autorizado!");
+
         User user = userRepository.findByEmail(createUserDTO.email()).orElseThrow(() -> new RuntimeException("Usuario n'ao encontrado"));
         ObjectMapper objectMapper = new ObjectMapper()
                 .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         ObjectNode userObject = objectMapper.valueToTree(user);
         ObjectNode createUserDTOObject = objectMapper.valueToTree(createUserDTO);
-
-//        ObjectNode objectMeged = objectMapper.createObjectNode();
-//        objectMeged.setAll((ObjectNode) createUserDTOObject);
-//        objectMeged.setAll((ObjectNode) userObject);
 
         createUserDTOObject.fields().forEachRemaining( entry -> {
             if (
@@ -111,12 +117,6 @@ public class UserService {
                 userObject.set(entry.getKey(), entry.getValue());
             }
         });
-
-//        CreateUserDTO newUser = objectMapper.treeToValue(userObject, CreateUserDTO.class);
-//        System.out.println(userObject);
-//        System.out.println(userObject.get("roles"));
-
-//        ObjectNode roles = objectMapper.valueToTree(userObject.get("roles"));
 
         System.out.println(userObject.get("roles"));
 
@@ -129,10 +129,7 @@ public class UserService {
                         .cnpj(userObject.get("cnpj").asText())
                         .roles(roles)
                         .build();
-//        System.out.println(user.getRoles().stream().map(
-//                role -> role.getName().name()).collect(Collectors.toList())
-//        );
-//        System.out.println(updatedUser.getRoles().stream().map(role -> role.getName().name()).collect(Collectors.toList())  );
+
         userRepository.save(updatedUser);
 
     }
