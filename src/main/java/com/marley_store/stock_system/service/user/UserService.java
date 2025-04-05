@@ -3,7 +3,6 @@ package com.marley_store.stock_system.service.user;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.marley_store.stock_system.config.security.SecurityConfiguration;
@@ -12,7 +11,6 @@ import com.marley_store.stock_system.dto.user.CreateUserDTO;
 import com.marley_store.stock_system.dto.user.LoginUserDTO;
 import com.marley_store.stock_system.dto.jwtToken.RecoveryJwtTokenDTO;
 import com.marley_store.stock_system.model.role.Role;
-import com.marley_store.stock_system.model.role.RoleName;
 import com.marley_store.stock_system.model.user.*;
 import com.marley_store.stock_system.model.user.userDetailsImpl.UserDetailsImpl;
 import com.marley_store.stock_system.repository.UserRepository;
@@ -26,7 +24,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Service
 public class UserService {
@@ -53,8 +50,9 @@ public class UserService {
     private UserAuthenticationFilter userAuthenticationFilter;
 
 
-    public List<User> findByName(String name){
-        return userRepository.findByName(name);
+    public Optional<User> findByEmail(HttpServletRequest request){
+        String email = userAuthenticationFilter.getEmailToken(request);
+        return userRepository.findByEmail(email);
     }
 
     public List<User> getAllUsers(){

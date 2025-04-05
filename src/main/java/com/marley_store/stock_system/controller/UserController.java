@@ -13,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/v1/user")
@@ -20,14 +21,23 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    @GetMapping()
-    public List<User> getUser(@RequestParam(value="byName") String name){
-        return userService.findByName(name);
+    @PostMapping("/create")
+    public ResponseEntity<Void> createUser(@RequestBody CreateUserDTO createUserDTO){
+        userService.createUser(createUserDTO);
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
-    @GetMapping("/get-all")
-    public List<User> getAllUsers(){
-        return userService.getAllUsers();
+//    @RequestParam(value="byName", required=false) String name
+    @GetMapping("/get")
+    public Optional<User> getUser(HttpServletRequest request){
+//        return name.isEmpty() ? userService.getAllUsers() : userService.findByName(name);
+        return userService.findByEmail(request);
+    }
+
+    @PatchMapping("/update")
+    public ResponseEntity<String> updateUser(@RequestBody  CreateUserDTO createUserDTO, HttpServletRequest request) throws JsonProcessingException {
+        userService.updateUser(createUserDTO, request);
+        return new ResponseEntity<>("Usuario atualizado com sucesso!", HttpStatus.OK);
     }
 
     @DeleteMapping("/delete")
@@ -35,23 +45,10 @@ public class UserController {
         return userService.deleteUser(user);
     }
 
-
-    @PostMapping("/create")
-    public ResponseEntity<Void> createUser(@RequestBody CreateUserDTO createUserDTO){
-        userService.createUser(createUserDTO);
-        return new ResponseEntity<>(HttpStatus.CREATED);
-    }
-
     @PostMapping("/login")
     public ResponseEntity<RecoveryJwtTokenDTO> authenticateUser(@RequestBody LoginUserDTO loginUserDto){
         RecoveryJwtTokenDTO token = userService.authenticateUser(loginUserDto);
         return new ResponseEntity<>(token, HttpStatus.OK);
-    }
-
-    @PatchMapping("/update-user")
-    public ResponseEntity<String> updateUser(@RequestBody  CreateUserDTO createUserDTO, HttpServletRequest request) throws JsonProcessingException {
-        userService.updateUser(createUserDTO, request);
-        return new ResponseEntity<>("Usuario atualizado com sucesso!", HttpStatus.OK);
     }
 
     @GetMapping("/test")

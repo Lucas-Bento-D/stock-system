@@ -64,6 +64,18 @@ public class UserAuthenticationFilter extends OncePerRequestFilter {
         return false;
     }
 
+    public String getEmailToken(HttpServletRequest request){
+        String token = recoveryToken(request);
+        if (token != null){
+            String subject = jwtTokenService.getSubjectFromToken(token);
+            User user = userRepository.findByEmail(subject).get();
+            return user.getEmail();
+
+        }else {
+            throw new RuntimeException("Token ausente");
+        }
+    }
+
     // Recupera o token do cabeçalho Authorization da requisição
     private String recoveryToken(HttpServletRequest request) {
         String authorizationHeader = request.getHeader("Authorization");

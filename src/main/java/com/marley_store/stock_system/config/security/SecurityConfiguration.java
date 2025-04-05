@@ -36,7 +36,8 @@ public class SecurityConfiguration {
     // Endpoints que requerem autenticação para serem acessados
     public static final String [] ENDPOINTS_WITH_AUTHENTICATION_REQUIRED = {
             "/v1/user/test",
-            "/v1/user/update-user"
+            "/v1/user/update",
+            "/v1/user/get"
     };
 
     // Endpoints que só podem ser acessador por usuários com permissão de cliente
@@ -46,7 +47,6 @@ public class SecurityConfiguration {
 
     // Endpoints que só podem ser acessador por usuários com permissão de administrador
     public static final String [] ENDPOINTS_ADMIN = {
-            "/v1/user/get-all"
     };
 
     // retorna a configuração principal de segurança do Spring Security para a aplicação. Ele define a política de autorização para os endpoints da API REST.
