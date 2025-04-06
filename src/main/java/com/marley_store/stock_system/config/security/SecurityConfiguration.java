@@ -29,6 +29,15 @@ public class SecurityConfiguration {
 
 
     public static final String[] ENDPOINTS_WITH_AUTHENTICATION_NOT_REQUIRED = {
+            "/api-docs",
+            "/api-docs/swagger-config",
+            "/swagger-ui/index.html",
+            "/swagger-ui/index.css",
+            "/swagger-ui/swagger-initializer.js",
+            "/swagger-ui/swagger-ui-standalone-preset.js",
+            "/swagger-ui/swagger-ui.css",
+            "/swagger-ui/swagger-ui-bundle.js",
+
             "/v1/user/login",
             "/v1/user/create"
     };
