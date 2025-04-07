@@ -74,10 +74,12 @@ public class UserService {
         userRepository.save(newUser);
     }
 
-    public StatusUser deleteUser(User user){
-        User userr = userRepository.findByEmail(user.getEmail()).orElseThrow(() -> new RuntimeException("Usuario n'ao encontrado"));
+    public StatusUser deleteUser(HttpServletRequest request){
+
+        String email = userAuthenticationFilter.getEmailToken(request);
+        User user = userRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("Usuario não encontrado"));
 //        List<Long> usersId = users.stream().map(user1 -> user1.getId()).collect(Collectors.toList());
-        userRepository.deleteById(userr.getId());
+        userRepository.deleteById(user.getId());
         return new StatusUser(204, "User Deleted");
     }
 

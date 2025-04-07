@@ -41,8 +41,8 @@ public class UserController {
     }
 
     @DeleteMapping("/delete")
-    public StatusUser deleteUser(@RequestBody User user){
-        return userService.deleteUser(user);
+    public StatusUser deleteUser(HttpServletRequest request){
+        return userService.deleteUser(request);
     }
 
     @PostMapping("/login")
