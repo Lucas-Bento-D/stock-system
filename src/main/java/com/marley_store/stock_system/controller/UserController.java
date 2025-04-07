@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.marley_store.stock_system.dto.user.CreateUserDTO;
 import com.marley_store.stock_system.dto.user.LoginUserDTO;
 import com.marley_store.stock_system.dto.jwtToken.RecoveryJwtTokenDTO;
+import com.marley_store.stock_system.dto.user.UpdateUserDTO;
 import com.marley_store.stock_system.model.user.*;
 import com.marley_store.stock_system.service.user.UserService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -35,8 +36,8 @@ public class UserController {
     }
 
     @PatchMapping("/update")
-    public ResponseEntity<String> updateUser(@RequestBody  CreateUserDTO createUserDTO, HttpServletRequest request) throws JsonProcessingException {
-        userService.updateUser(createUserDTO, request);
+    public ResponseEntity<String> updateUser(@RequestBody UpdateUserDTO updateUserDTO, HttpServletRequest request) throws JsonProcessingException {
+        userService.updateUser(updateUserDTO, request);
         return new ResponseEntity<>("Usuario atualizado com sucesso!", HttpStatus.OK);
     }
 

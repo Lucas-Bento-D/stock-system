@@ -10,6 +10,7 @@ import com.marley_store.stock_system.config.userAuthenticationFilter.UserAuthent
 import com.marley_store.stock_system.dto.user.CreateUserDTO;
 import com.marley_store.stock_system.dto.user.LoginUserDTO;
 import com.marley_store.stock_system.dto.jwtToken.RecoveryJwtTokenDTO;
+import com.marley_store.stock_system.dto.user.UpdateUserDTO;
 import com.marley_store.stock_system.model.role.Role;
 import com.marley_store.stock_system.model.user.*;
 import com.marley_store.stock_system.model.user.userDetailsImpl.UserDetailsImpl;
@@ -96,17 +97,15 @@ public class UserService {
         return new RecoveryJwtTokenDTO(jwtTokenService.generateToken(userDetails));
     }
 
-    public void updateUser(CreateUserDTO createUserDTO, HttpServletRequest request) throws JsonProcessingException {
+    public void updateUser(UpdateUserDTO updateUserDTO, HttpServletRequest request) throws JsonProcessingException {
 
-        Boolean isSameUser = userAuthenticationFilter.verifyEmailToken(request, createUserDTO.email());
+        String email = userAuthenticationFilter.getEmailToken(request);
 
-        if(!isSameUser) throw new RuntimeException("Email não autorizado!");
-
-        User user = userRepository.findByEmail(createUserDTO.email()).orElseThrow(() -> new RuntimeException("Usuario n'ao encontrado"));
+        User user = userRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("Usuario n'ao encontrado"));
         ObjectMapper objectMapper = new ObjectMapper()
                 .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         ObjectNode userObject = objectMapper.valueToTree(user);
-        ObjectNode createUserDTOObject = objectMapper.valueToTree(createUserDTO);
+        ObjectNode createUserDTOObject = objectMapper.valueToTree(updateUserDTO);
 
         createUserDTOObject.fields().forEachRemaining( entry -> {
             if (
