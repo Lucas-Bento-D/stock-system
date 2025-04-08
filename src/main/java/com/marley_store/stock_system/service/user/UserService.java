@@ -78,10 +78,10 @@ public class UserService {
     public StatusUser deleteUser(HttpServletRequest request){
 
         String email = userAuthenticationFilter.getEmailToken(request);
-        User user = userRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("Usuario não encontrado"));
+        User user = userRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("User not found"));
 //        List<Long> usersId = users.stream().map(user1 -> user1.getId()).collect(Collectors.toList());
         userRepository.deleteById(user.getId());
-        return new StatusUser(204, "User Deleted");
+        return new StatusUser(204, "Deleted user");
     }
 
     public RecoveryJwtTokenDTO authenticateUser(LoginUserDTO loginUserDto){
@@ -101,7 +101,7 @@ public class UserService {
 
         String email = userAuthenticationFilter.getEmailToken(request);
 
-        User user = userRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("Usuario n'ao encontrado"));
+        User user = userRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("User not found"));
         ObjectMapper objectMapper = new ObjectMapper()
                 .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         ObjectNode userObject = objectMapper.valueToTree(user);

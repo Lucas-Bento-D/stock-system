@@ -41,7 +41,7 @@ public class UserAuthenticationFilter extends OncePerRequestFilter {
 
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             }else {
-                throw new RuntimeException("Token ausente");
+                throw new RuntimeException("Token not found");
             }
         }
 
@@ -58,7 +58,7 @@ public class UserAuthenticationFilter extends OncePerRequestFilter {
                 if(user.getEmail() == email) return true;
                 return false;
             }else {
-                throw new RuntimeException("Token ausente");
+                throw new RuntimeException("Token not found");
             }
         }
         return false;
@@ -72,7 +72,7 @@ public class UserAuthenticationFilter extends OncePerRequestFilter {
             return user.getEmail();
 
         }else {
-            throw new RuntimeException("Token ausente");
+            throw new RuntimeException("Token not found");
         }
     }
 

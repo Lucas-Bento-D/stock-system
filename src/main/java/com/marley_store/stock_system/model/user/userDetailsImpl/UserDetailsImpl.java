@@ -16,7 +16,7 @@ public class UserDetailsImpl implements UserDetails {
 
     public UserDetailsImpl(User user) {
         if (user == null) {
-            throw new IllegalArgumentException("O usuário não pode ser nulo");
+            throw new IllegalArgumentException("Null user");
         }
         this.user = user;
     }

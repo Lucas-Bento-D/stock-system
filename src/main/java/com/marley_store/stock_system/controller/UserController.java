@@ -38,7 +38,7 @@ public class UserController {
     @PatchMapping("/update")
     public ResponseEntity<String> updateUser(@RequestBody UpdateUserDTO updateUserDTO, HttpServletRequest request) throws JsonProcessingException {
         userService.updateUser(updateUserDTO, request);
-        return new ResponseEntity<>("Usuario atualizado com sucesso!", HttpStatus.OK);
+        return new ResponseEntity<>("User updated successfully!", HttpStatus.OK);
     }
 
     @DeleteMapping("/delete")
@@ -54,6 +54,6 @@ public class UserController {
 
     @GetMapping("/test")
     public ResponseEntity<String> getAuthenticationTest() {
-        return new ResponseEntity<>("Autenticado com sucesso", HttpStatus.OK);
+        return new ResponseEntity<>("User authenticated", HttpStatus.OK);
     }
 }

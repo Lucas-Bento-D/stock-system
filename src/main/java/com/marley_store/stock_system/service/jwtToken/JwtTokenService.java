@@ -26,7 +26,7 @@ public class JwtTokenService {
                     .withSubject(userDetails.getUser().getEmail())
                     .sign(algorithm);
         }catch (JWTCreationException exception){
-            throw new JWTCreationException("Erro ao gerar token.", exception);
+            throw new JWTCreationException("Error to generate token.", exception);
         }
     }
 
@@ -39,7 +39,7 @@ public class JwtTokenService {
                     .verify(token) // verifica validade do token
                     .getSubject(); // pega o nome do usuario do token(nesse caso o email)
         }catch (JWTVerificationException exception){
-            throw new JWTVerificationException("Token invalido ou expirado");
+            throw new JWTVerificationException("Invalid token");
         }
     }
 
