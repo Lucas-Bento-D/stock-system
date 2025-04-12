@@ -46,6 +46,7 @@ public class SecurityConfiguration {
     public static final String [] ENDPOINTS_WITH_AUTHENTICATION_REQUIRED = {
             "/v1/user/test",
             "/v1/user/update",
+            "/v1/user/update-password",
             "/v1/user/get",
             "/v1/user/delete"
     };
