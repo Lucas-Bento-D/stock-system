@@ -10,6 +10,7 @@ import com.marley_store.stock_system.config.userAuthenticationFilter.UserAuthent
 import com.marley_store.stock_system.dto.user.CreateUserDTO;
 import com.marley_store.stock_system.dto.user.LoginUserDTO;
 import com.marley_store.stock_system.dto.jwtToken.RecoveryJwtTokenDTO;
+import com.marley_store.stock_system.dto.user.UpdatePasswordDTO;
 import com.marley_store.stock_system.dto.user.UpdateUserDTO;
 import com.marley_store.stock_system.model.role.Role;
 import com.marley_store.stock_system.model.user.*;
@@ -17,6 +18,7 @@ import com.marley_store.stock_system.model.user.userDetailsImpl.UserDetailsImpl;
 import com.marley_store.stock_system.repository.UserRepository;
 import com.marley_store.stock_system.service.jwtToken.JwtTokenService;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -131,6 +133,28 @@ public class UserService {
 
         userRepository.save(updatedUser);
 
+    }
+
+    public void updatePassword(UpdatePasswordDTO updatePasswordDTO, HttpServletRequest request) throws RuntimeException{
+        String email = userAuthenticationFilter.getEmailToken(request);
+
+        if(
+                !Objects.equals(updatePasswordDTO.password(), updatePasswordDTO.confirmPassword())
+        ) throw new RuntimeException("Passwords are diferents");
+
+        User user = userRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("User not found"));
+        String encodedPassword = passwordEncoder.encode(updatePasswordDTO.password());
+
+        User updatePassword = User.builder()
+                        .id(user.getId())
+                        .name(user.getName())
+                        .password(encodedPassword)
+                        .email(user.getEmail())
+                        .cnpj(user.getCnpj())
+                        .roles(user.getRoles())
+                        .build();
+
+        userRepository.save(updatePassword);
     }
 
 }
