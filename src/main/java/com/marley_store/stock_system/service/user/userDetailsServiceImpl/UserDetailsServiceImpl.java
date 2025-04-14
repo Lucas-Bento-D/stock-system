@@ -1,5 +1,6 @@
 package com.marley_store.stock_system.service.user.userDetailsServiceImpl;
 
+import com.marley_store.stock_system.exceptions.UserNotFoundException;
 import com.marley_store.stock_system.model.user.User;
 import com.marley_store.stock_system.model.user.userDetailsImpl.UserDetailsImpl;
 import com.marley_store.stock_system.repository.UserRepository;
@@ -27,10 +28,9 @@ public class UserDetailsServiceImpl implements UserDetailsService {
      */
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        User user = userRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("User not found"));
         return userRepository.findByEmail(email)
                 .map(UserDetailsImpl::new)
-                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+                .orElseThrow(() -> new UserNotFoundException());
 
     }
 
