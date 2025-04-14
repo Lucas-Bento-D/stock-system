@@ -12,6 +12,7 @@ import com.marley_store.stock_system.dto.user.LoginUserDTO;
 import com.marley_store.stock_system.dto.jwtToken.RecoveryJwtTokenDTO;
 import com.marley_store.stock_system.dto.user.UpdatePasswordDTO;
 import com.marley_store.stock_system.dto.user.UpdateUserDTO;
+import com.marley_store.stock_system.exceptions.UserNotFoundException;
 import com.marley_store.stock_system.model.role.Role;
 import com.marley_store.stock_system.model.user.*;
 import com.marley_store.stock_system.model.user.userDetailsImpl.UserDetailsImpl;
@@ -80,7 +81,7 @@ public class UserService {
     public StatusUser deleteUser(HttpServletRequest request){
 
         String email = userAuthenticationFilter.getEmailToken(request);
-        User user = userRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("User not found"));
+        User user = userRepository.findByEmail(email).orElseThrow(() -> new UserNotFoundException());
 //        List<Long> usersId = users.stream().map(user1 -> user1.getId()).collect(Collectors.toList());
         userRepository.deleteById(user.getId());
         return new StatusUser(204, "Deleted user");
@@ -103,7 +104,7 @@ public class UserService {
 
         String email = userAuthenticationFilter.getEmailToken(request);
 
-        User user = userRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("User not found"));
+        User user = userRepository.findByEmail(email).orElseThrow(() -> new UserNotFoundException());
         ObjectMapper objectMapper = new ObjectMapper()
                 .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         ObjectNode userObject = objectMapper.valueToTree(user);
@@ -142,7 +143,7 @@ public class UserService {
                 !Objects.equals(updatePasswordDTO.password(), updatePasswordDTO.confirmPassword())
         ) throw new RuntimeException("Passwords are diferents");
 
-        User user = userRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("User not found"));
+        User user = userRepository.findByEmail(email).orElseThrow(() -> new UserNotFoundException());
         String encodedPassword = passwordEncoder.encode(updatePasswordDTO.password());
 
         User updatePassword = User.builder()
