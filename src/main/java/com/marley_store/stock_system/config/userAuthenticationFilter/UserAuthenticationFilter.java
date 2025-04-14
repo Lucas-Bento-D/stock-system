@@ -1,6 +1,7 @@
 package com.marley_store.stock_system.config.userAuthenticationFilter;
 
 import com.marley_store.stock_system.config.security.SecurityConfiguration;
+import com.marley_store.stock_system.exceptions.jwtToken.TokenNotFoundException;
 import com.marley_store.stock_system.model.user.User;
 import com.marley_store.stock_system.model.user.userDetailsImpl.UserDetailsImpl;
 import com.marley_store.stock_system.repository.UserRepository;
@@ -41,7 +42,7 @@ public class UserAuthenticationFilter extends OncePerRequestFilter {
 
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             }else {
-                throw new RuntimeException("Token not found");
+                throw new TokenNotFoundException();
             }
         }
 
@@ -58,7 +59,7 @@ public class UserAuthenticationFilter extends OncePerRequestFilter {
                 if(user.getEmail() == email) return true;
                 return false;
             }else {
-                throw new RuntimeException("Token not found");
+                throw new TokenNotFoundException();
             }
         }
         return false;
@@ -72,7 +73,7 @@ public class UserAuthenticationFilter extends OncePerRequestFilter {
             return user.getEmail();
 
         }else {
-            throw new RuntimeException("Token not found");
+            throw new TokenNotFoundException();
         }
     }
 
