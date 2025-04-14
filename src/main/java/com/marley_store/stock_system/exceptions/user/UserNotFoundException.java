@@ -1,4 +1,4 @@
-package com.marley_store.stock_system.exceptions;
+package com.marley_store.stock_system.exceptions.user;
 
 public class UserNotFoundException extends RuntimeException{
     public UserNotFoundException(){ super("User not found"); }
