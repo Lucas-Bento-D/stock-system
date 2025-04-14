@@ -82,18 +82,12 @@ public class UserService {
 
         String email = userAuthenticationFilter.getEmailToken(request);
         User user = userRepository.findByEmail(email).orElseThrow(() -> new UserNotFoundException());
-//        List<Long> usersId = users.stream().map(user1 -> user1.getId()).collect(Collectors.toList());
         userRepository.deleteById(user.getId());
         return new StatusUser(204, "Deleted user");
     }
 
     public RecoveryJwtTokenDTO authenticateUser(LoginUserDTO loginUserDto){
-        System.out.println("Chamando authenticateUser com: " + loginUserDto.email());
         UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(loginUserDto.email(), loginUserDto.password());
-        System.out.println(usernamePasswordAuthenticationToken);
-
-        System.out.println("Autenticação bem-sucedida para: " + loginUserDto.email());
-
 
         Authentication authentication = authenticationManager.authenticate(usernamePasswordAuthenticationToken);
         UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
@@ -119,8 +113,6 @@ public class UserService {
                 userObject.set(entry.getKey(), entry.getValue());
             }
         });
-
-        System.out.println(userObject.get("roles"));
 
         List<Role> roles = objectMapper.convertValue(userObject.get("roles"), new TypeReference<List<Role>>(){});
         User updatedUser = User.builder()
