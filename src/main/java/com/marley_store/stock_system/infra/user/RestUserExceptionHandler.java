@@ -1,4 +1,4 @@
-package com.marley_store.stock_system.infra;
+package com.marley_store.stock_system.infra.user;
 
 import com.marley_store.stock_system.dto.restMessage.RestMessageDTO;
 import com.marley_store.stock_system.exceptions.jwtToken.TokenNotFoundException;
@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 @ControllerAdvice
-public class RestExceptionHandler extends ResponseEntityExceptionHandler {
+public class RestUserExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(UserNotFoundException.class)
     private ResponseEntity<RestMessageDTO> userNotFoundException(UserNotFoundException exception){
@@ -18,9 +18,4 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorMessage);
     }
 
-    @ExceptionHandler(TokenNotFoundException.class)
-    private ResponseEntity<RestMessageDTO> tokenNotFoundException(TokenNotFoundException exception){
-        RestMessageDTO errorMessage = new RestMessageDTO(HttpStatus.NOT_FOUND.value(), exception.getMessage());
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorMessage);
-    }
 }
