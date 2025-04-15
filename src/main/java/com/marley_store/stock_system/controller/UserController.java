@@ -6,6 +6,7 @@ import com.marley_store.stock_system.dto.user.LoginUserDTO;
 import com.marley_store.stock_system.dto.jwtToken.RecoveryJwtTokenDTO;
 import com.marley_store.stock_system.dto.user.UpdatePasswordDTO;
 import com.marley_store.stock_system.dto.user.UpdateUserDTO;
+import com.marley_store.stock_system.dto.restMessage.RestMessageDTO;
 import com.marley_store.stock_system.model.user.*;
 import com.marley_store.stock_system.service.user.UserService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -14,7 +15,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -24,9 +24,10 @@ public class UserController {
     private UserService userService;
 
     @PostMapping("/create")
-    public ResponseEntity<Void> createUser(@RequestBody CreateUserDTO createUserDTO){
+    public ResponseEntity<RestMessageDTO> createUser(@RequestBody CreateUserDTO createUserDTO){
         userService.createUser(createUserDTO);
-        return new ResponseEntity<>(HttpStatus.CREATED);
+        RestMessageDTO successMessage = new RestMessageDTO(HttpStatus.CREATED.value(), "User updated successfully!");
+        return ResponseEntity.status(HttpStatus.CREATED).body(successMessage);
     }
 
     @GetMapping("/get")
@@ -35,20 +36,25 @@ public class UserController {
     }
 
     @PatchMapping("/update")
-    public ResponseEntity<String> updateUser(@RequestBody UpdateUserDTO updateUserDTO, HttpServletRequest request) throws JsonProcessingException {
+    public ResponseEntity<RestMessageDTO> updateUser(@RequestBody UpdateUserDTO updateUserDTO, HttpServletRequest request) throws JsonProcessingException {
         userService.updateUser(updateUserDTO, request);
-        return new ResponseEntity<>("User updated successfully!", HttpStatus.OK);
+        RestMessageDTO successMessage = new RestMessageDTO(HttpStatus.OK.value(), "User updated successfully!");
+        return ResponseEntity.status(HttpStatus.OK).body(successMessage);
+        //return new ResponseEntity<>("User updated successfully!", HttpStatus.OK);
     }
 
     @PatchMapping("/update-password")
-    public ResponseEntity<String> updatePassword(@RequestBody UpdatePasswordDTO updatePasswordDTO, HttpServletRequest request){
+    public ResponseEntity<RestMessageDTO> updatePassword(@RequestBody UpdatePasswordDTO updatePasswordDTO, HttpServletRequest request){
         userService.updatePassword(updatePasswordDTO, request);
-        return new ResponseEntity<>("User password updated successfully", HttpStatus.OK);
+        RestMessageDTO successMessage = new RestMessageDTO(HttpStatus.OK.value(), "User password updated successfully");
+        return ResponseEntity.status(HttpStatus.OK).body(successMessage);
     }
 
     @DeleteMapping("/delete")
-    public StatusUser deleteUser(HttpServletRequest request){
-        return userService.deleteUser(request);
+    public ResponseEntity<RestMessageDTO> deleteUser(HttpServletRequest request){
+        userService.deleteUser(request);
+        RestMessageDTO successMessage = new RestMessageDTO(HttpStatus.OK.value(), "User password updated successfully");
+        return ResponseEntity.status(HttpStatus.CREATED).body(successMessage);
     }
 
     @PostMapping("/login")
@@ -58,7 +64,8 @@ public class UserController {
     }
 
     @GetMapping("/test")
-    public ResponseEntity<String> getAuthenticationTest() {
-        return new ResponseEntity<>("User authenticated", HttpStatus.OK);
+    public ResponseEntity<RestMessageDTO> getAuthenticationTest() {
+        RestMessageDTO successMessage = new RestMessageDTO(HttpStatus.OK.value(), "User authenticated");
+        return ResponseEntity.status(HttpStatus.OK).body(successMessage);
     }
 }

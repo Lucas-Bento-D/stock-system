@@ -77,12 +77,11 @@ public class UserService {
         userRepository.save(newUser);
     }
 
-    public StatusUser deleteUser(HttpServletRequest request){
+    public void deleteUser(HttpServletRequest request){
 
         String email = userAuthenticationFilter.getEmailToken(request);
         User user = userRepository.findByEmail(email).orElseThrow(() -> new UserNotFoundException());
         userRepository.deleteById(user.getId());
-        return new StatusUser(204, "Deleted user");
     }
 
     public RecoveryJwtTokenDTO authenticateUser(LoginUserDTO loginUserDto){

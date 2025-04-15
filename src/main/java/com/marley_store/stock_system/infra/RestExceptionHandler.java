@@ -1,5 +1,6 @@
 package com.marley_store.stock_system.infra;
 
+import com.marley_store.stock_system.dto.restMessage.RestMessageDTO;
 import com.marley_store.stock_system.exceptions.jwtToken.TokenNotFoundException;
 import com.marley_store.stock_system.exceptions.user.UserNotFoundException;
 import org.springframework.http.HttpStatus;
@@ -12,14 +13,14 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(UserNotFoundException.class)
-    private ResponseEntity<RestMessage> userNotFoundException(UserNotFoundException exception){
-        RestMessage errorMessage = new RestMessage(HttpStatus.NOT_FOUND.value(), exception.getMessage());
+    private ResponseEntity<RestMessageDTO> userNotFoundException(UserNotFoundException exception){
+        RestMessageDTO errorMessage = new RestMessageDTO(HttpStatus.NOT_FOUND.value(), exception.getMessage());
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorMessage);
     }
 
     @ExceptionHandler(TokenNotFoundException.class)
-    private ResponseEntity<RestMessage> tokenNotFoundException(TokenNotFoundException exception){
-        RestMessage errorMessage = new RestMessage(HttpStatus.NOT_FOUND.value(), exception.getMessage());
+    private ResponseEntity<RestMessageDTO> tokenNotFoundException(TokenNotFoundException exception){
+        RestMessageDTO errorMessage = new RestMessageDTO(HttpStatus.NOT_FOUND.value(), exception.getMessage());
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorMessage);
     }
 }
