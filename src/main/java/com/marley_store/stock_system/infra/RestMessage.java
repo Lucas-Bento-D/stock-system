@@ -7,7 +7,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @Getter
 @Setter
-public class RestErrorMessage {
+public class RestMessage {
     private int status;
     private String message;
 }

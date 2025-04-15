@@ -29,10 +29,8 @@ public class UserController {
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
-//    @RequestParam(value="byName", required=false) String name
     @GetMapping("/get")
     public Optional<User> getUser(HttpServletRequest request){
-//        return name.isEmpty() ? userService.getAllUsers() : userService.findByName(name);
         return userService.findByEmail(request);
     }
 

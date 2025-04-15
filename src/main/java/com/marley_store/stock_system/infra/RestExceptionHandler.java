@@ -12,14 +12,14 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(UserNotFoundException.class)
-    private ResponseEntity<RestErrorMessage> userNotFoundException(UserNotFoundException exception){
-        RestErrorMessage errorMessage = new RestErrorMessage(HttpStatus.NOT_FOUND.value(), exception.getMessage());
+    private ResponseEntity<RestMessage> userNotFoundException(UserNotFoundException exception){
+        RestMessage errorMessage = new RestMessage(HttpStatus.NOT_FOUND.value(), exception.getMessage());
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorMessage);
     }
 
     @ExceptionHandler(TokenNotFoundException.class)
-    private ResponseEntity<RestErrorMessage> tokenNotFoundException(TokenNotFoundException exception){
-        RestErrorMessage errorMessage = new RestErrorMessage(HttpStatus.NOT_FOUND.value(), exception.getMessage());
+    private ResponseEntity<RestMessage> tokenNotFoundException(TokenNotFoundException exception){
+        RestMessage errorMessage = new RestMessage(HttpStatus.NOT_FOUND.value(), exception.getMessage());
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorMessage);
     }
 }
