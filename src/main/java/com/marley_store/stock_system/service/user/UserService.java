@@ -12,6 +12,7 @@ import com.marley_store.stock_system.dto.user.LoginUserDTO;
 import com.marley_store.stock_system.dto.jwtToken.RecoveryJwtTokenDTO;
 import com.marley_store.stock_system.dto.user.UpdatePasswordDTO;
 import com.marley_store.stock_system.dto.user.UpdateUserDTO;
+import com.marley_store.stock_system.exceptions.jwtToken.TokenGenerationFailed;
 import com.marley_store.stock_system.exceptions.user.UserNotFoundException;
 import com.marley_store.stock_system.model.role.Role;
 import com.marley_store.stock_system.model.user.*;
@@ -20,11 +21,14 @@ import com.marley_store.stock_system.repository.UserRepository;
 import com.marley_store.stock_system.service.jwtToken.JwtTokenService;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.*;
 
@@ -78,18 +82,20 @@ public class UserService {
     }
 
     public void deleteUser(HttpServletRequest request){
-
         String email = userAuthenticationFilter.getEmailToken(request);
         User user = userRepository.findByEmail(email).orElseThrow(() -> new UserNotFoundException());
         userRepository.deleteById(user.getId());
     }
 
     public RecoveryJwtTokenDTO authenticateUser(LoginUserDTO loginUserDto){
-        UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(loginUserDto.email(), loginUserDto.password());
-
-        Authentication authentication = authenticationManager.authenticate(usernamePasswordAuthenticationToken);
-        UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
-        return new RecoveryJwtTokenDTO(jwtTokenService.generateToken(userDetails));
+        try {
+            UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(loginUserDto.email(), loginUserDto.password());
+            Authentication authentication = authenticationManager.authenticate(usernamePasswordAuthenticationToken);
+            UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
+            return new RecoveryJwtTokenDTO(jwtTokenService.generateToken(userDetails));
+        }catch (BadCredentialsException e) {
+            throw new TokenGenerationFailed("Invalid credentials");
+        }
     }
 
     public void updateUser(UpdateUserDTO updateUserDTO, HttpServletRequest request) throws JsonProcessingException {

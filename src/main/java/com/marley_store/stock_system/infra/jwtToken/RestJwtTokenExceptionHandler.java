@@ -1,6 +1,7 @@
 package com.marley_store.stock_system.infra.jwtToken;
 
 import com.marley_store.stock_system.dto.restMessage.RestMessageDTO;
+import com.marley_store.stock_system.exceptions.jwtToken.TokenGenerationFailed;
 import com.marley_store.stock_system.exceptions.jwtToken.TokenNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,4 +18,9 @@ public class RestJwtTokenExceptionHandler extends ResponseEntityExceptionHandler
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorMessage);
     }
 
+    @ExceptionHandler(TokenGenerationFailed.class)
+    private ResponseEntity<RestMessageDTO> tokenGenerationFailed(TokenGenerationFailed exception){
+        RestMessageDTO errorMessage = new RestMessageDTO(HttpStatus.UNAUTHORIZED.value(), exception.getMessage());
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorMessage);
+    }
 }
