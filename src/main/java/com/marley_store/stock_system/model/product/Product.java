@@ -1,4 +1,4 @@
-package com.marley_store.stock_system.model.products;
+package com.marley_store.stock_system.model.product;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -12,7 +12,7 @@ import lombok.Setter;
 @Entity
 @AllArgsConstructor
 @Table(name = "products")
-public class products {
+public class Product {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
