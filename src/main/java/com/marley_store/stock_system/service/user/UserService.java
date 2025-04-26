@@ -17,18 +17,16 @@ import com.marley_store.stock_system.exceptions.user.UserNotFoundException;
 import com.marley_store.stock_system.model.role.Role;
 import com.marley_store.stock_system.model.user.*;
 import com.marley_store.stock_system.model.user.userDetailsImpl.UserDetailsImpl;
-import com.marley_store.stock_system.repository.UserRepository;
+import com.marley_store.stock_system.repository.user.UserRepository;
 import com.marley_store.stock_system.service.jwtToken.JwtTokenService;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.*;
 

@@ -1,4 +1,4 @@
-package com.marley_store.stock_system.repository;
+package com.marley_store.stock_system.repository.user;
 
 import com.marley_store.stock_system.model.user.User;
 import org.springframework.data.jpa.repository.JpaRepository;

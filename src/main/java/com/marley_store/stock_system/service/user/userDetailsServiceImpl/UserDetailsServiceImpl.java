@@ -2,7 +2,7 @@ package com.marley_store.stock_system.service.user.userDetailsServiceImpl;
 
 import com.marley_store.stock_system.exceptions.user.UserNotFoundException;
 import com.marley_store.stock_system.model.user.userDetailsImpl.UserDetailsImpl;
-import com.marley_store.stock_system.repository.UserRepository;
+import com.marley_store.stock_system.repository.user.UserRepository;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;

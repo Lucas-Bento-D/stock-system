@@ -4,7 +4,7 @@ import com.marley_store.stock_system.config.security.SecurityConfiguration;
 import com.marley_store.stock_system.exceptions.jwtToken.TokenNotFoundException;
 import com.marley_store.stock_system.model.user.User;
 import com.marley_store.stock_system.model.user.userDetailsImpl.UserDetailsImpl;
-import com.marley_store.stock_system.repository.UserRepository;
+import com.marley_store.stock_system.repository.user.UserRepository;
 import com.marley_store.stock_system.service.jwtToken.JwtTokenService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
