@@ -14,8 +14,9 @@ public class ProductService {
     @Autowired
     private ProductRepository productRepository;
 
-    public List<Product> getAll(){
-        return productRepository.findAll();
+    public List<Product> getAll(Long codeBar){
+
+        return productRepository.findByCodeBar(codeBar);
     }
 
     public void createProduct(CreateProductDTO createProductDTO){

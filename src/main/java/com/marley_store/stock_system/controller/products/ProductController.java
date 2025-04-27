@@ -19,9 +19,11 @@ public class ProductController {
     private ProductService productService;
 
     @GetMapping("/get")
-    public List<Product> getProduct(){
-        return productService.getAll();
+    public List<Product> getProduct(@RequestParam(name = "codeBar") Long codeBar){
+        return productService.getAll(codeBar);
     }
+
+
 
     @PostMapping("/create")
     public ResponseEntity<RestMessageDTO> createProduct(@RequestBody CreateProductDTO createProductDTO){
