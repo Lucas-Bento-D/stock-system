@@ -2,11 +2,14 @@ package com.marley_store.stock_system.controller.products;
 
 import com.marley_store.stock_system.dto.product.CreateProductDTO;
 import com.marley_store.stock_system.dto.restMessage.RestMessageDTO;
+import com.marley_store.stock_system.model.product.Product;
 import com.marley_store.stock_system.service.product.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/v1/product")
@@ -16,8 +19,8 @@ public class ProductController {
     private ProductService productService;
 
     @GetMapping("/get")
-    public String getProduct(){
-        return "online";
+    public List<Product> getProduct(){
+        return productService.getAll();
     }
 
     @PostMapping("/create")
