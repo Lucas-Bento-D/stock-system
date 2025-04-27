@@ -1,6 +1,7 @@
 package com.marley_store.stock_system.controller.products;
 
 import com.marley_store.stock_system.dto.product.CreateProductDTO;
+import com.marley_store.stock_system.dto.restMessage.RestDataMessageDTO;
 import com.marley_store.stock_system.dto.restMessage.RestMessageDTO;
 import com.marley_store.stock_system.model.product.Product;
 import com.marley_store.stock_system.service.product.ProductService;
@@ -19,8 +20,10 @@ public class ProductController {
     private ProductService productService;
 
     @GetMapping("/get")
-    public List<Product> getProduct(@RequestParam(name = "codeBar") Long codeBar){
-        return productService.getAll(codeBar);
+    public ResponseEntity<RestDataMessageDTO<List<Product>>> getProduct(@RequestParam(name = "codeBar") Long codeBar){
+        List<Product> products = productService.getAll(codeBar);
+        RestDataMessageDTO<List<Product>> restProductDTO = new RestDataMessageDTO<>(HttpStatus.OK.value(), "Product request succesfully", products);
+        return ResponseEntity.status(HttpStatus.OK).body(restProductDTO);
     }
 
 
