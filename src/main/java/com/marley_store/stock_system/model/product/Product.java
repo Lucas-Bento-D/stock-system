@@ -1,14 +1,12 @@
 package com.marley_store.stock_system.model.product;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 @Data
 @Getter
 @Setter
+@Builder
 @Entity
 @AllArgsConstructor
 @Table(name = "products")
