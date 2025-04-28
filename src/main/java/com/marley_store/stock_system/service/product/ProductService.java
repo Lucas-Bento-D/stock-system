@@ -1,12 +1,15 @@
 package com.marley_store.stock_system.service.product;
 
 import com.marley_store.stock_system.dto.product.CreateProductDTO;
+import com.marley_store.stock_system.dto.product.UpdateProductDTO;
+import com.marley_store.stock_system.exceptions.product.ProductNotFoundException;
 import com.marley_store.stock_system.model.product.Product;
 import com.marley_store.stock_system.repository.product.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ProductService {
@@ -18,7 +21,7 @@ public class ProductService {
         return productRepository.findAll();
     }
 
-    public List<Product> getProduct(Long codeBar){
+    public Optional<Product> getProduct(Long codeBar){
         return productRepository.findByCodeBar(codeBar);
     }
 
@@ -32,6 +35,11 @@ public class ProductService {
                 .build();
 
         productRepository.save(product);
+    }
+
+    public void updateProduct(UpdateProductDTO updateProductDTO, Long codeBar){
+        Product product = productRepository.findByCodeBar(codeBar).orElseThrow(() -> new ProductNotFoundException());
+
     }
 
 }
