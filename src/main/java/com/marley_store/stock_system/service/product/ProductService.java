@@ -1,5 +1,8 @@
 package com.marley_store.stock_system.service.product;
 
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.marley_store.stock_system.dto.product.CreateProductDTO;
 import com.marley_store.stock_system.dto.product.UpdateProductDTO;
 import com.marley_store.stock_system.exceptions.product.ProductNotFoundException;
@@ -39,6 +42,22 @@ public class ProductService {
 
     public void updateProduct(UpdateProductDTO updateProductDTO, Long codeBar){
         Product product = productRepository.findByCodeBar(codeBar).orElseThrow(() -> new ProductNotFoundException());
+
+        ObjectMapper objectMapper = new ObjectMapper()
+                .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+        ObjectNode productObject = objectMapper.valueToTree(product);
+        ObjectNode productDTOObject = objectMapper.valueToTree(updateProductDTO);
+
+        Product updateProduct = Product.builder()
+                .id(productObject.get("id").longValue())
+                .name(productDTOObject.get("name").asText())
+                .quantity(productObject.get("quantity").longValue())
+                .codeBar(productObject.get("codeBar").longValue())
+                .costPrice(productDTOObject.get("costPrice").floatValue())
+                .sellingPrice(productDTOObject.get("sellingPrice").floatValue())
+                .build();
+
+        productRepository.save(updateProduct);
 
     }
 
