@@ -19,9 +19,16 @@ public class ProductController {
     @Autowired
     private ProductService productService;
 
+    @GetMapping("/get-all")
+    public ResponseEntity<RestDataMessageDTO<List<Product>>> getAllProducts(){
+        List<Product> products = productService.getAllProducts();
+        RestDataMessageDTO<List<Product>> restProductDTO = new RestDataMessageDTO<>(HttpStatus.OK.value(), "Products request succesfully", products);
+        return ResponseEntity.status(HttpStatus.OK).body(restProductDTO);
+    }
+
     @GetMapping("/get")
     public ResponseEntity<RestDataMessageDTO<List<Product>>> getProduct(@RequestParam(name = "codeBar") Long codeBar){
-        List<Product> products = productService.getAll(codeBar);
+        List<Product> products = productService.getProduct(codeBar);
         RestDataMessageDTO<List<Product>> restProductDTO = new RestDataMessageDTO<>(HttpStatus.OK.value(), "Product request succesfully", products);
         return ResponseEntity.status(HttpStatus.OK).body(restProductDTO);
     }
