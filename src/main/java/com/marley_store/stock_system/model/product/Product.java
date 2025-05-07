@@ -1,5 +1,6 @@
 package com.marley_store.stock_system.model.product;
 
+import com.marley_store.stock_system.model.user.User;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -26,6 +27,10 @@ public class Product {
 
     @Column(nullable = false)
     private Float sellingPrice;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 
     public Product(){}
 
