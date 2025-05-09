@@ -24,9 +24,9 @@ public class ProductController {
     private ProductService productService;
 
     @GetMapping("/get-all")
-    public ResponseEntity<RestDataMessageDTO<List<Product>>> getAllProducts(){
-        List<Product> products = productService.getAllProducts();
-        RestDataMessageDTO<List<Product>> restProductDTO = new RestDataMessageDTO<>(HttpStatus.OK.value(), "Products request succesfully", products);
+    public ResponseEntity<RestDataMessageDTO<List<GetProductDTO>>> getAllProducts(){
+        List<GetProductDTO> products = productService.getAllProducts();
+        RestDataMessageDTO<List<GetProductDTO>> restProductDTO = new RestDataMessageDTO<>(HttpStatus.OK.value(), "Products request succesfully", products);
         return ResponseEntity.status(HttpStatus.OK).body(restProductDTO);
     }
 

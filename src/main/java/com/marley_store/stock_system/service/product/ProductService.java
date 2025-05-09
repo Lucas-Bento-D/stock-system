@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class ProductService {
@@ -32,8 +33,15 @@ public class ProductService {
     @Autowired
     private UserRepository userRepository;
 
-    public List<Product> getAllProducts(){
-        return productRepository.findAll();
+    public List<GetProductDTO> getAllProducts(){
+        List<Product> products = productRepository.findAll();
+        if(!products.isEmpty()){
+            return products.stream()
+                    .map(GetProductDTO::new)
+                    .collect(Collectors.toList());
+        }else{
+            throw new ProductNotFoundException();
+        }
     }
 
     public GetProductDTO getProduct(Long codeBar){

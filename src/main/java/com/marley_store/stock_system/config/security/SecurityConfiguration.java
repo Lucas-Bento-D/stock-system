@@ -52,7 +52,8 @@ public class SecurityConfiguration {
 
             "/v1/product/create",
             "/v1/product/get",
-            "/v1/product/update/*"
+            "/v1/product/update/*",
+            "/v1/product/get-all"
     };
 
     // Endpoints que só podem ser acessador por usuários com permissão de cliente
