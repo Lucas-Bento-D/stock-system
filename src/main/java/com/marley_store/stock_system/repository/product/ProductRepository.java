@@ -12,5 +12,5 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     <S extends Product> S saveAndFlush(S entity);
     boolean existsByName(String name);
     boolean existsByCodeBar(Long codeBar);
-
+    void deleteByCodeBar(Long codeBar);
 }

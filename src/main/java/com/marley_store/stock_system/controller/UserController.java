@@ -53,7 +53,7 @@ public class UserController {
     @DeleteMapping("/delete")
     public ResponseEntity<RestMessageDTO> deleteUser(HttpServletRequest request){
         userService.deleteUser(request);
-        RestMessageDTO successMessage = new RestMessageDTO(HttpStatus.OK.value(), "User password updated successfully");
+        RestMessageDTO successMessage = new RestMessageDTO(HttpStatus.OK.value(), "User password deleted successfully");
         return ResponseEntity.status(HttpStatus.CREATED).body(successMessage);
     }
 

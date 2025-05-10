@@ -94,4 +94,14 @@ public class ProductService {
 
     }
 
+    public void deleteProduct(Long codeBar){
+        Optional<Product> product = productRepository.findByCodeBar(codeBar);
+
+        if(product.isPresent()){
+            productRepository.deleteByCodeBar(codeBar);
+        }else {
+            throw new ProductNotFoundException();
+        }
+    }
+
 }

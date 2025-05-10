@@ -52,4 +52,11 @@ public class ProductController {
         RestMessageDTO successMessage = new RestMessageDTO(HttpStatus.CREATED.value(), "Product updated succesfully!");
         return ResponseEntity.status(HttpStatus.CREATED).body(successMessage);
     }
+
+    @DeleteMapping("/delete/{codeBar}")
+    public ResponseEntity<RestMessageDTO> deleteProduct(@PathVariable Long codeBar){
+        productService.deleteProduct(codeBar);
+        RestMessageDTO successMessage = new RestMessageDTO(HttpStatus.OK.value(), "Product deleted successfully");
+        return ResponseEntity.status(HttpStatus.CREATED).body(successMessage);
+    }
 }
