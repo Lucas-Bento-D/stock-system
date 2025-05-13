@@ -1,4 +1,4 @@
-package com.marley_store.stock_system.controller;
+package com.marley_store.stock_system.controller.user;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.marley_store.stock_system.dto.user.CreateUserDTO;
