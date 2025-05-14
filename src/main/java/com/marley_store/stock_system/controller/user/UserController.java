@@ -57,9 +57,10 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<RecoveryJwtTokenDTO> authenticateUser(@RequestBody LoginUserDTO loginUserDto){
+    public ResponseEntity<RestDataMessageDTO<RecoveryJwtTokenDTO>> authenticateUser(@RequestBody LoginUserDTO loginUserDto){
         RecoveryJwtTokenDTO token = userService.authenticateUser(loginUserDto);
-        return new ResponseEntity<>(token, HttpStatus.OK);
+        RestDataMessageDTO<RecoveryJwtTokenDTO> successMessage = new RestDataMessageDTO(HttpStatus.OK.value(), "User logged succesfully", token);
+        return ResponseEntity.status(HttpStatus.OK).body(successMessage);
     }
 
     @GetMapping("/test")
