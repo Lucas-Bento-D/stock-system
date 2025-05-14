@@ -7,11 +7,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.marley_store.stock_system.config.security.SecurityConfiguration;
 import com.marley_store.stock_system.config.userAuthenticationFilter.UserAuthenticationFilter;
-import com.marley_store.stock_system.dto.user.CreateUserDTO;
-import com.marley_store.stock_system.dto.user.LoginUserDTO;
+import com.marley_store.stock_system.dto.user.*;
 import com.marley_store.stock_system.dto.jwtToken.RecoveryJwtTokenDTO;
-import com.marley_store.stock_system.dto.user.UpdatePasswordDTO;
-import com.marley_store.stock_system.dto.user.UpdateUserDTO;
 import com.marley_store.stock_system.exceptions.jwtToken.TokenGenerationFailed;
 import com.marley_store.stock_system.exceptions.user.UserNotFoundException;
 import com.marley_store.stock_system.model.role.Role;
@@ -55,9 +52,13 @@ public class UserService {
     private UserAuthenticationFilter userAuthenticationFilter;
 
 
-    public Optional<User> findByEmail(HttpServletRequest request){
+    public GetUserDTO findByEmail(HttpServletRequest request){
         String email = userAuthenticationFilter.getEmailToken(request);
-        return userRepository.findByEmail(email);
+        Optional<User> user = userRepository.findByEmail(email);
+
+        if(!user.isPresent()) throw new UserNotFoundException();
+
+        return new GetUserDTO(user.get());
     }
 
     public List<User> getAllUsers(){
