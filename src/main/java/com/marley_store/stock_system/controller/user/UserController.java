@@ -1,11 +1,9 @@
 package com.marley_store.stock_system.controller.user;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.marley_store.stock_system.dto.user.CreateUserDTO;
-import com.marley_store.stock_system.dto.user.LoginUserDTO;
+import com.marley_store.stock_system.dto.restMessage.RestDataMessageDTO;
+import com.marley_store.stock_system.dto.user.*;
 import com.marley_store.stock_system.dto.jwtToken.RecoveryJwtTokenDTO;
-import com.marley_store.stock_system.dto.user.UpdatePasswordDTO;
-import com.marley_store.stock_system.dto.user.UpdateUserDTO;
 import com.marley_store.stock_system.dto.restMessage.RestMessageDTO;
 import com.marley_store.stock_system.model.user.*;
 import com.marley_store.stock_system.service.user.UserService;
@@ -31,8 +29,10 @@ public class UserController {
     }
 
     @GetMapping("/get")
-    public Optional<User> getUser(HttpServletRequest request){
-        return userService.findByEmail(request);
+    public ResponseEntity<RestDataMessageDTO<GetUserDTO>> getUser(HttpServletRequest request){
+        GetUserDTO user = userService.findByEmail(request);
+        RestDataMessageDTO<GetUserDTO> restUserDTO = new RestDataMessageDTO<>(HttpStatus.OK.value(), "User request succesfully", user);
+        return ResponseEntity.status(HttpStatus.OK).body(restUserDTO);
     }
 
     @PatchMapping("/update")
@@ -40,7 +40,6 @@ public class UserController {
         userService.updateUser(updateUserDTO, request);
         RestMessageDTO successMessage = new RestMessageDTO(HttpStatus.OK.value(), "User updated successfully!");
         return ResponseEntity.status(HttpStatus.OK).body(successMessage);
-        //return new ResponseEntity<>("User updated successfully!", HttpStatus.OK);
     }
 
     @PatchMapping("/update-password")
@@ -58,9 +57,10 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<RecoveryJwtTokenDTO> authenticateUser(@RequestBody LoginUserDTO loginUserDto){
+    public ResponseEntity<RestDataMessageDTO<RecoveryJwtTokenDTO>> authenticateUser(@RequestBody LoginUserDTO loginUserDto){
         RecoveryJwtTokenDTO token = userService.authenticateUser(loginUserDto);
-        return new ResponseEntity<>(token, HttpStatus.OK);
+        RestDataMessageDTO<RecoveryJwtTokenDTO> successMessage = new RestDataMessageDTO(HttpStatus.OK.value(), "User logged succesfully", token);
+        return ResponseEntity.status(HttpStatus.OK).body(successMessage);
     }
 
     @GetMapping("/test")
